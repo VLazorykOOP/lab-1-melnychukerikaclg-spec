@@ -1,0 +1,4 @@
+N = 5
+Sum dodat = 9
+Sum vid = -8
+Riznuca = 17

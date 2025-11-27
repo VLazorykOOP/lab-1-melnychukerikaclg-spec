@@ -162,9 +162,9 @@ void ShowMainMenu()
 void MenuTask()
 {
     cout << "     Menu Task   \n";
-    cout << "    1.  Local array  \n";
-    cout << "    2.  Dynamic array 1 \n";
-    cout << "    3.  Dynamic array 2  new \n"; 
+    cout << "    1.  zavdan 1  \n";
+    cout << "    2.  zavdan 2 \n";
+    cout << "    3.  zavdan 3 \n"; 
     cout << "    4.  Dynamic array : vector \n";
     cout << "    5.  Exit \n";
 }
@@ -188,13 +188,155 @@ void MenuInput()
 *****************
 *  A - in 
 *  B, C - out 
-*/
+
 void  TestVariant(int N, double* A, double* B, double* C) {
     for (int i = 0; i < N; i++) {
         B[i] = A[2 * i];
         C[i] = A[2 * i + 1];
     }
 }
+*/
+
+/*
+* Task 17 - Завдання 1
+* Задано одновимірний масив А розміру N.
+* Обчислити різницю суми додатних та суми від’ємних елементів масиву.
+*/
+void Task17_Var1()
+{
+    const int MAX_SIZE = 1000;
+    double A[MAX_SIZE];
+    int n = ConsoleInputArray(MAX_SIZE, A);
+
+    double sumPos = 0.0, sumNeg = 0.0;
+    for (int i = 0; i < n; i++) {
+        if (A[i] > 0) sumPos += A[i];
+        else if (A[i] < 0) sumNeg += A[i];
+    }
+
+    double result = sumPos - sumNeg;
+
+    cout << "\nSum dodat elements = " << sumPos;
+    cout << "\nSum vid elements = " << sumNeg;
+    cout << "\nRiznuca (SumPos - SumNeg) = " << result << endl;
+
+    // Запис результату у файл
+    ofstream fout("task17_var1.txt");
+    if (!fout.fail()) {
+        fout << "N = " << n << endl;
+        fout << "Sum dodat = " << sumPos << endl;
+        fout << "Sum vid = " << sumNeg << endl;
+        fout << "Riznuca = " << result << endl;
+        fout.close();
+    }
+
+    cout << "\nTap Enter";
+    cin.ignore();
+    cin.get();
+
+}
+
+/*
+* Task 17 - Завдання 2
+* Знайти значення максимального елемента серед елементів, кратних k1,
+* розташованих до першого від’ємного елемента.
+*/
+void Task17_Var2()
+{
+    const int MAX_SIZE = 1000;
+    int A[MAX_SIZE];
+    int n;
+
+    cout << "enter rozmir masivu: ";
+    cin >> n;
+    if (n <= 0 || n > MAX_SIZE) return;
+
+    cout << "enter elem masivu:\n";
+    for (int i = 0; i < n; i++) {
+        cout << "A[" << i << "] = ";
+        cin >> A[i];
+    }
+
+    int k1;
+    cout << "enter num k1: ";
+    cin >> k1;
+
+    int maxVal = INT_MIN;
+    bool foundNegative = false;
+
+    for (int i = 0; i < n; i++) {
+        if (A[i] < 0) {
+            foundNegative = true;
+            break;
+        }
+        if (A[i] % k1 == 0 && A[i] > maxVal) {
+            maxVal = A[i];
+        }
+    }
+
+    if (!foundNegative) {
+        cout << "\nnetu videm elem.\n";
+    }
+
+    if (maxVal == INT_MIN) {
+        cout << "\nnetu elem, kratnix " << k1 << " do persoho videm.\n";
+    }
+    else {
+        cout << "\nmax elem, kratniq " << k1 << " do persoho videm = " << maxVal << endl;
+    }
+
+    cout << "\ntap Enter";
+    cin.ignore();
+    cin.get();
+}
+
+
+/*
+* Task 17 - Завдання 3
+* З масиву A(n) створити масив B(n), де кожне число з групи повторень береться лише один раз.
+* Вивести масив B по 7 чисел у рядку.
+*/
+void Task17_Var3()
+{
+    const int MAX_SIZE = 400;
+    int A[MAX_SIZE];
+    int n;
+
+    cout << "enter rozmur masivu (do 400): ";
+    cin >> n;
+    if (n <= 0 || n > MAX_SIZE) return;
+
+    cout << "enter elem masivu:\n";
+    for (int i = 0; i < n; i++) {
+        cout << "A[" << i << "] = ";
+        cin >> A[i];
+    }
+
+    vector<int> B;
+    for (int i = 0; i < n; i++) {
+        bool found = false;
+        for (int j = 0; j < B.size(); j++) {
+            if (B[j] == A[i]) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            B.push_back(A[i]);
+        }
+    }
+
+    cout << "\nmasuv B (unikalni elem):\n";
+    for (int i = 0; i < B.size(); i++) {
+        cout << B[i] << "\t";
+        if ((i + 1) % 7 == 0) cout << endl;
+    }
+
+    cout << "\ntap Enter";
+    cin.ignore();
+    cin.get();
+}
+
 /*
 *  Task  Var
 * 
@@ -206,19 +348,31 @@ void TaskV()
     do {
         system("cls");
         MenuTask();
-        ch = getchar();
-        getchar();
-            switch (ch) {
-             case '1': cout << " 1 "; break;
-             case '2': cout << " 2 "; break;
-            //
-            case '5': return;
-            }
-        cout << " Press any key and enter\n";
-        ch = getchar();
-        } while (ch != 27);
-    
+        cout << "enter num task: ";
+        cin >> ch;
+        cin.ignore(); // очищає буфер після вводу
+
+        switch (ch) {
+        case '1':
+            Task17_Var1();
+            break;
+        case '2':
+            Task17_Var2();
+            break;
+        case '3':
+            Task17_Var3();
+            break;
+        case '5':
+            return;
+        default:
+            cout << "Невірний вибір. Спробуйте ще раз.\n";
+        };
+
+        cout << "\nTap Enter";
+        cin.ignore(); // чекає на Enter
+    } while (true);
 }
+
 
 void ArrayLocal()
 {
